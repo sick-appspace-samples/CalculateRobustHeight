@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <manifest>
-    <application name="CalculateRobustHeight">
-        <crown name="CalculateRobustHeight">
+    <application name="CalculateRobustHeight_Template">
+        <crown name="CalculateRobustHeight_Template">
             <desc>user script</desc>
         </crown>
         <meta key="author">Gabriel Musset</meta>

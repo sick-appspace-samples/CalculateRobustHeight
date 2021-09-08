@@ -131,7 +131,6 @@ local function main()
   -------------------------------------
 
   local v = View.create()
-  v:setID("viewer2D")
   v:clear()
 
   v:addProfile(polyProfile, helper.graphDeco(LINE_COLOR, 'Scanned profile'))
