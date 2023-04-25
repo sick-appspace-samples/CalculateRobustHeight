@@ -50,14 +50,15 @@ local function main()
   -- Scan polygon ---------------------
   -------------------------------------
 
-  local polyProfile = helper.polygonToProfile(POLYGON)
+  local polyProfile = Profile.createFromPoints(POLYGON)
+  polyProfile = Profile.resizeScale(polyProfile, 50)
 
   -------------------------------------
   -- Generate random noise ------------
   -------------------------------------
 
   if ENABLE_NOISE then
-    polyProfile = helper.addRandomNoiseToProfile(polyProfile, 0.1)
+    Profile.addNoiseInplace(polyProfile, "UNIFORM", -0.1, 0.1)
   end
 
   -------------------------------------
@@ -131,7 +132,6 @@ local function main()
   -------------------------------------
 
   local v = View.create()
-  v:setID("viewer2D")
   v:clear()
 
   v:addProfile(polyProfile, helper.graphDeco(LINE_COLOR, 'Scanned profile'))
@@ -140,39 +140,35 @@ local function main()
   Script.sleep(DELAY) -- For demonstration purpose only
 
   v:clear()
-  v:addProfile(polyProfile, helper.graphDeco(GREYED_OUT, 'First derivative'))
-  v:addProfile(firstDerivative, helper.graphDeco(LINE_COLOR, '', true))
+  local id = v:addProfile(polyProfile, helper.graphDeco(GREYED_OUT, 'First derivative'))
+  v:addProfile(firstDerivative, helper.graphDeco(LINE_COLOR, '', true), nil, id)
   v:present()
 
   Script.sleep(DELAY) -- For demonstration purpose only
 
   v:clear()
-  v:addProfile(polyProfile, helper.graphDeco(GREYED_OUT, 'Binarized derivative'))
-  v:addProfile(firstDerivative, helper.graphDeco(GREYED_OUT_DARK, '', true))
-  v:addProfile(binarizedDerivative, helper.graphDeco(LINE_COLOR, '', true))
+  id = v:addProfile(polyProfile, helper.graphDeco(GREYED_OUT, 'Binarized derivative'))
+  v:addProfile(firstDerivative, helper.graphDeco(GREYED_OUT_DARK, '', true), nil, id)
+  v:addProfile(binarizedDerivative, helper.graphDeco(LINE_COLOR, '', true), nil, id)
   v:present()
 
   Script.sleep(DELAY) -- For demonstration purpose only
 
   v:clear()
-  v:addProfile(firstDerivative, helper.graphDeco(GREYED_OUT, 'Found steps'))
-  v:addProfile(binarizedDerivative, helper.graphDeco(GREYED_OUT_DARK, '', true))
-  v:addProfile(polyProfile, helper.graphDeco(LINE_COLOR, '', true))
-  for _, p in ipairs(resultPlatformProfiles) do
-    v:addProfile(p, helper.graphDeco(HIGHLIGHT_COLOR, '', true))
-  end
+  id = v:addProfile(firstDerivative, helper.graphDeco(GREYED_OUT, 'Found steps'))
+  v:addProfile(binarizedDerivative, helper.graphDeco(GREYED_OUT_DARK, '', true), nil, id)
+  v:addProfile(polyProfile, helper.graphDeco(LINE_COLOR, '', true), nil, id)
+  v:addProfile(resultPlatformProfiles, helper.graphDeco(HIGHLIGHT_COLOR, '', true), nil, id)
   v:present()
 
   Script.sleep(DELAY) -- For demonstration purpose only
 
   v:clear()
 
-  v:addProfile(firstDerivative, helper.graphDeco(GREYED_OUT, 'Median filtered steps'))
-  v:addProfile(binarizedDerivative, helper.graphDeco(GREYED_OUT_DARK, '', true))
-  v:addProfile(polyProfile, helper.graphDeco(LINE_COLOR, '', true))
-  for _, p in ipairs(medianPlatformProfiles) do
-    v:addProfile(p, helper.graphDeco(HIGHLIGHT_COLOR, '', true))
-  end
+  id = v:addProfile(firstDerivative, helper.graphDeco(GREYED_OUT, 'Median filtered steps'))
+  v:addProfile(binarizedDerivative, helper.graphDeco(GREYED_OUT_DARK, '', true), nil, id)
+  v:addProfile(polyProfile, helper.graphDeco(LINE_COLOR, '', true), nil, id)
+  v:addProfile(medianPlatformProfiles, helper.graphDeco(HIGHLIGHT_COLOR, '', true), nil, id)
   v:present()
 end
 Script.register('Engine.OnStarted', main)
